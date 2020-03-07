@@ -34,4 +34,8 @@ class CTLAPIManager
     CTLParser.parse(@ctl_url, @name, start_index, data)
   end
 
+  def get_max_batch_size
+    get_raw_entries(0, 3000)["entries"].length
+  end
+
 end
