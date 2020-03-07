@@ -2,6 +2,10 @@ require "net/http"
 require "uri"
 require_relative './lib/ctl_parser'
 require_relative './lib/ctl_api_manager'
+require_relative './lib/ctl_lister'
+
+puts "Listing Available CTLs"
+pp CTLLister.get_available_ctls
 
 start_index = 2000
 num_entries_to_pull = 10
