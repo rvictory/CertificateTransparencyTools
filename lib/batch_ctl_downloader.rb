@@ -1,3 +1,4 @@
+# encoding: us-ascii
 require_relative "ctl_api_manager"
 
 class BatchCTLDownloader
