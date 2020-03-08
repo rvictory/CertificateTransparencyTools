@@ -3,8 +3,6 @@ require "base64"
 require "json"
 require 'openssl'
 
-#@todo Doesn't work with some invalid UTF-8 things. Need to treat the "string" as a raw string
-
 # Fix BinData for our case, not sure why this issue exists but oh well
 module BinData
   module IO

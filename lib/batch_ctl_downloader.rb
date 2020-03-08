@@ -51,6 +51,7 @@ class BatchCTLDownloader
             @output_handler.write_batch(@ctl_url, @name, work_item.start_index, work_item.end_index, results)
           rescue Exception => e
             puts "Failed to process batch #{work_item.inspect}: #{e.message}"
+            puts e.backtrace.join("\n")
             failed_batches.push(work_item)
           end
           mutex.synchronize do
