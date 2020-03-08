@@ -61,10 +61,14 @@ class BatchCTLDownloader
     end
 
     puts "Beginning download"
+    start_time = Time.now.to_f
     while completed_batches < num_batches
-      puts "#{completed_batches}/#{num_batches} - #{completed_batches * 1.0 / num_batches * 100}% Complete (downloaded #{completed_batches * @batch_size} items)"
+      puts "#{completed_batches}/#{num_batches} - #{completed_batches * 1.0 / num_batches * 100}% Complete (downloaded #{completed_batches * @batch_size} items). #{completed_batches * @batch_size / (Time.now.to_f - start_time)} records per second"
       sleep 5
     end
+    end_time = Time.now.to_f
+
+    puts "Completed in #{end_time - start_time} seconds."
 
     # Kill the threads
     threads.each do |thread|
