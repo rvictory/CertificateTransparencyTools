@@ -38,14 +38,20 @@ class BatchCTLDownloader
     completed_batches = 0
     mutex = Mutex.new
     threads = []
+    failed_batches = []
 
     @num_threads.times do
       t = Thread.new do
         manager = CTLAPIManager.new(@ctl_url, @name)
         while true
           work_item = queue.pop
-          results = manager.get_parsed_entries(work_item.start_index, work_item.end_index - work_item.start_index + 1)
-          @output_handler.write_batch(@ctl_url, @name, work_item.start_index, work_item.end_index, results)
+          begin
+            results = manager.get_parsed_entries(work_item.start_index, work_item.end_index - work_item.start_index + 1)
+            @output_handler.write_batch(@ctl_url, @name, work_item.start_index, work_item.end_index, results)
+          rescue Exception => e
+            puts "Failed to process batch #{work_item.inspect}: #{e.message}"
+            failed_batches.push(work_item)
+          end
           mutex.synchronize do
             completed_batches += 1
           end

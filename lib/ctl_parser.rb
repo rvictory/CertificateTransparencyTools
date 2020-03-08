@@ -3,6 +3,8 @@ require "base64"
 require "json"
 require 'openssl'
 
+#@todo Doesn't work with some invalid UTF-8 things. Need to treat the "string" as a raw string
+
 # Fix BinData for our case, not sure why this issue exists but oh well
 module BinData
   module IO
@@ -154,7 +156,7 @@ module CTLParser
     if cn
       to_return.push(cn[1])
     end
-    certificate.extensions.filter {|x| x.oid == "subjectAltName"}.each do |san|
+    certificate.extensions.select {|x| x.oid == "subjectAltName"}.each do |san|
       san.value.split(", ").each do |part|
         if part.include?("DNS:")
           to_return.push(part.sub("DNS:", ""))
