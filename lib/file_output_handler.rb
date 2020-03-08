@@ -19,19 +19,27 @@ class FileOutputHandler < OutputHandler
             retried = true
             # We likely have an issue with UTF-8 domain names. Try to force a representation to keep the data
             row["leaf_cert"][:subject].keys.each do |key|
-              row["leaf_cert"][:subject][key] = row["leaf_cert"][:subject][key].encode('utf-8', :invalid => :replace, undef: :replace) unless row["leaf_cert"][:subject][key].nil?
+              row["leaf_cert"][:subject][key] = row["leaf_cert"][:subject][key].encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') unless row["leaf_cert"][:subject][key].nil?
+            end
+
+            row["leaf_cert"][:extensions].keys.each do |key|
+              row["leaf_cert"][:extensions][key] = row["leaf_cert"][:extensions][key].encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') unless row["leaf_cert"][:extensions][key].nil?
             end
 
             new_domains = []
             row["leaf_cert"]["all_domains"].each do |domain|
-              new_domains.push domain.encode('utf-8', :invalid => :replace, undef: :replace) unless domain.nil?
+              new_domains.push domain.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') unless domain.nil?
             end
             row["leaf_cert"]["all_domains"] = new_domains
 
             new_chain = []
             row["chain"].each do |chain_cert|
               chain_cert[:subject].keys.each do |key|
-                chain_cert[:subject][key] = chain_cert[:subject][key].encode('utf-8', :invalid => :replace, undef: :replace) unless chain_cert[:subject][key].nil?
+                chain_cert[:subject][key] = chain_cert[:subject][key].encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') unless chain_cert[:subject][key].nil?
+              end
+
+              chain_cert[:extensions].keys.each do |key|
+                chain_cert[:extensions][key] = chain_cert[:extensions][key].encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') unless chain_cert[:extensions][key].nil?
               end
               new_chain.push(chain_cert)
             end
@@ -41,7 +49,7 @@ class FileOutputHandler < OutputHandler
           end
 
           # @todo Write this to a file or something?
-          puts "Failed to save #{row.inspect}"
+          puts "Failed to save #{row.inspect}: #{e.message}"
         end
       end
     end
