@@ -11,7 +11,7 @@ class FileOutputHandler < OutputHandler
     cleaned_filename = ctl_url.gsub("/", "_")
     #puts "Received batch from #{ctl_url} s: #{start_index} e: #{end_index} data length: #{data.length}"
     FileUtils.mkdir_p(File.join(@@dir, "/#{cleaned_filename}/"))
-    File.open(File.join(@@dir, "/#{cleaned_filename}/", "#{cleaned_filename}_#{start_index}-#{end_index}.json"), "w") do |f|
+    File.open(File.join(@@dir, "/#{cleaned_filename}/", "#{cleaned_filename}_#{start_index}-#{end_index}.json.active"), "w") do |f|
       data.each do |row|
         retried = false
         begin
@@ -54,6 +54,10 @@ class FileOutputHandler < OutputHandler
           puts "Failed to save #{row.inspect}: #{e.message}"
         end
       end
+    end
+    begin
+      FileUtils.mv(File.join(@@dir,"#{cleaned_filename}_#{start_index}-#{end_index}.json.active"), File.join(@@dir,"#{cleaned_filename}_#{start_index}-#{end_index}.json"))
+    rescue
     end
   end
 end
