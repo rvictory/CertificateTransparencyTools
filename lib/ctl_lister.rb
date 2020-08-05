@@ -26,7 +26,7 @@ module CTLLister
           log["max_batch_size"] = manager.get_max_batch_size
         end
         to_return.push(CTL.new_from_hash(log))
-        pp to_return.last
+          #pp to_return.last
       end
 
       to_return
@@ -39,7 +39,7 @@ end
 
 class CTL
 
-  attr_reader :operated_by, :key, :url, :description, :maximum_merge_delay
+  attr_reader :operated_by, :key, :url, :description, :maximum_merge_delay, :max_batch_size
 
   def initialize(description, key, url, maximum_merge_delay, operated_by, max_batch_size=nil)
     @description = description

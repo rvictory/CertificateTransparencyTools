@@ -1,7 +1,10 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    amq-protocol (2.3.2)
     bindata (2.4.6)
+    bunny (2.15.0)
+      amq-protocol (~> 2.3, >= 2.3.1)
     ipaddr (1.2.2)
     openssl (2.1.2)
       ipaddr
@@ -11,6 +14,7 @@ PLATFORMS
 
 DEPENDENCIES
   bindata
+  bunny
   openssl
 
 BUNDLED WITH

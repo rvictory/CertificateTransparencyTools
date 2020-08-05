@@ -1,4 +1,5 @@
 require_relative 'output_handler'
+require "fileutils"
 
 class FileOutputHandler < OutputHandler
 
@@ -9,7 +10,8 @@ class FileOutputHandler < OutputHandler
   def self.write_batch(ctl_url, name, start_index, end_index, data)
     cleaned_filename = ctl_url.gsub("/", "_")
     #puts "Received batch from #{ctl_url} s: #{start_index} e: #{end_index} data length: #{data.length}"
-    File.open(File.join(@@dir,"#{cleaned_filename}_#{start_index}-#{end_index}.json"), "w") do |f|
+    FileUtils.mkdir_p(File.join(@@dir, "/#{cleaned_filename}/"))
+    File.open(File.join(@@dir, "/#{cleaned_filename}/", "#{cleaned_filename}_#{start_index}-#{end_index}.json"), "w") do |f|
       data.each do |row|
         retried = false
         begin

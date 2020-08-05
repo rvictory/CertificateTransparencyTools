@@ -1,4 +1,5 @@
 require "json"
+require "net/http"
 require_relative 'ctl_parser'
 
 class CTLAPIManager
@@ -10,7 +11,7 @@ class CTLAPIManager
 
   def get_cert_count
     request_url = "https://#{@ctl_url}ct/v1/get-sth"
-    puts "Using URL #{request_url}"
+    #puts "Using URL #{request_url}"
     uri = URI.parse(request_url)
     begin
       request_data = Net::HTTP.get_response(uri)
