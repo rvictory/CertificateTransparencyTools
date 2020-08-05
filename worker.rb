@@ -11,7 +11,9 @@ channel = conn.create_channel
 queue  = channel.queue(WORK_QUEUE)
 exchange  = channel.default_exchange
 
-FileOutputHandler.set_output_dir "output"
+output_dir = ENV['OUTPUT_DIR'] || "output"
+
+FileOutputHandler.set_output_dir output_dir
 
 managers = {}
 
