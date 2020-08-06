@@ -26,7 +26,7 @@ queue.subscribe do |delivery_info, metadata, payload|
   begin
     results = manager.get_parsed_entries(work_item.begin_index, work_item.end_index - work_item.begin_index + 1)
     FileOutputHandler.write_batch(work_item.url, "Name", work_item.begin_index, work_item.end_index, results)
-    puts "Wrote batch: #{work_item.to_hash.inspect}"
+      #puts "Wrote batch: #{work_item.to_hash.inspect}"
   rescue Exception => e
     puts "Failed to process batch #{work_item.inspect}: #{e.message}"
     puts e.backtrace.join("\n")

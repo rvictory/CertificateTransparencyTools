@@ -1,5 +1,6 @@
 require "json"
 require "net/http"
+require "curb"
 require_relative 'ctl_parser'
 
 class CTLAPIManager
@@ -9,6 +10,7 @@ class CTLAPIManager
     @ctl_url_uri = URI.parse("https://" + @ctl_url)
     @name = name
     @http_object = nil
+    @mutex = Mutex.new
   end
 
   def get_cert_count
@@ -25,6 +27,19 @@ class CTLAPIManager
   end
 
   def get_raw_entries(start_index, num_entries_to_pull)
+    request_url = "https://#{@ctl_url}ct/v1/get-entries?start=#{start_index}&end=#{start_index + num_entries_to_pull - 1}"
+    #uri = URI.parse(request_url)
+    if @http_object.nil?
+      @http_object = Curl::Easy.new
+    end
+    @mutex.synchronize do
+      @http_object.url = request_url
+      @http_object.perform
+      JSON.parse(@http_object.body_str)
+    end
+  end
+
+  def get_raw_entries_old(start_index, num_entries_to_pull)
     request_url = "https://#{@ctl_url}ct/v1/get-entries?start=#{start_index}&end=#{start_index + num_entries_to_pull - 1}"
     uri = URI.parse(request_url)
     if @http_object.nil?
