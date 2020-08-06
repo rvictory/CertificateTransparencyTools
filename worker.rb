@@ -35,5 +35,5 @@ queue.subscribe do |delivery_info, metadata, payload|
 end
 
 loop do
-
+  sleep 5
 end
