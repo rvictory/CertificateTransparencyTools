@@ -56,7 +56,7 @@ class FileOutputHandler < OutputHandler
       end
     end
     begin
-      FileUtils.mv(File.join(@@dir,"#{cleaned_filename}_#{start_index}-#{end_index}.json.active"), File.join(@@dir,"#{cleaned_filename}_#{start_index}-#{end_index}.json"))
+      FileUtils.mv(File.join(@@dir, "/#{cleaned_filename}/", "#{cleaned_filename}_#{start_index}-#{end_index}.json.active"), File.join(@@dir, "/#{cleaned_filename}/", "#{cleaned_filename}_#{start_index}-#{end_index}.json"))
     rescue
     end
   end
