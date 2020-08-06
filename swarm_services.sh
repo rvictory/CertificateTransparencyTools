@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo docker run --hostname my-rabbit -p 5672:5672 -p 15672:15672 -p8080:8080 rabbitmq:3-management
+sudo docker run -d --hostname my-rabbit -p 5672:5672 -p 15672:15672 -p8080:8080 rabbitmq:3-management
 
 sudo docker service rm ctl_task_generator
 sudo docker service create \
