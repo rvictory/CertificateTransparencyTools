@@ -6,7 +6,9 @@ class CTLAPIManager
 
   def initialize(ctl_url, name)
     @ctl_url = ctl_url
+    @ctl_url_uri = URI.parse("https://" + @ctl_url)
     @name = name
+    @http_object = nil
   end
 
   def get_cert_count
@@ -25,14 +27,23 @@ class CTLAPIManager
   def get_raw_entries(start_index, num_entries_to_pull)
     request_url = "https://#{@ctl_url}ct/v1/get-entries?start=#{start_index}&end=#{start_index + num_entries_to_pull - 1}"
     uri = URI.parse(request_url)
-    request_data = Net::HTTP.get_response(uri)
-    data = request_data.body
-    JSON.parse(data)
+    if @http_object.nil?
+      @http_object = Net::HTTP.start(uri.host, uri.port, :use_ssl => true)
+    end
+    request = Net::HTTP::Get.new uri.request_uri
+    JSON.parse(@http_object.request(request).body)
   end
 
   def get_parsed_entries(start_index, num_entries_to_pull)
+    start = Time.now.to_f
     data = get_raw_entries(start_index, num_entries_to_pull)
-    CTLParser.parse(@ctl_url, @name, start_index, data)
+    finish = Time.now.to_f
+    #puts "Took #{finish - start} seconds to download the raw entries"
+    start = Time.now.to_f
+    to_return = CTLParser.parse(@ctl_url, @name, start_index, data)
+    finish = Time.now.to_f
+    #puts "Took #{finish - start} seconds to parse the raw entries"
+    to_return
   end
 
   def get_max_batch_size
